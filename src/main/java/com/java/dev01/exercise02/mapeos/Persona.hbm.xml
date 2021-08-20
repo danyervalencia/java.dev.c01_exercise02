@@ -3,10 +3,12 @@
         PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.java.dev01.exercise02.pojos.Persona" table="empleado">
-        <id name="id" type="int">
-            <generator class="increment"/>
+    <class name="com.java.dev01.exercise02.pojos.Persona" table="personas">
+        <id name="id" column="pers_id" type="int">
+            <generator class="assigned"/>
         </id>
-        <property name="nombre" column="cnombre" type="string"/>
+        <property name="paternal" column="pers_paternal" type="string"/>
+        <property name="maternal" column="pers_maternal" type="string"/>
+        <property name="name" column="pers_name" type="string"/>
     </class>
 </hibernate-mapping>

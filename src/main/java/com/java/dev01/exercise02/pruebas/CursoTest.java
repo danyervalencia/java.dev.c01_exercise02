@@ -9,47 +9,46 @@ import org.hibernate.cfg.Configuration;
 
 import com.java.dev01.exercise02.pojos.Curso;
 
-public class Prueba02 {
+public class CursoTest {
     public static void main(String[] args) {
         SessionFactory sessions = new Configuration().configure().buildSessionFactory();
         Session session = sessions.openSession();
 
-        //1. insertar un nuevo curso
-        //2. listar los cursos
-
-        Transaction tx = null; // Encapsula el cilo de vida de las operaciones en una transaccion
+        Transaction tx = null; // Encapsula el ciclo de vida de las operaciones en una transaccion
         try {
             tx = session.beginTransaction();
 
             Curso c1 = new Curso();
-            c1.setCodigo("c04");
-            c1.setNombre("Java Basic");
-            c1.setCreditos(3);
+            c1.setCursCode("C11");
+            c1.setCursName(".Net Core Junior");
+            c1.setCursCredits(3);
             session.save(c1);
 
             Curso c2 = new Curso();
-            c2.setCodigo("c05");
-            c2.setNombre("Java Intermedio");
-            c2.setCreditos(4);
+            c2.setCursCode("C12");
+            c2.setCursName(".Net Core Developer");
+            c2.setCursCredits(4);
             session.save(c2);
 
             // Obtiene objetos de la base de datos
-            Curso curso = (Curso) session.get(Curso.class, c1.getCodigo());
-            System.out.println("Primer curso agregado = " + curso.getNombre());
+            Curso curso = (Curso) session.get(Curso.class, c1.getCursCode());
+            System.out.println("Primer curso agregado = " + curso.getCursName());
 
-            curso = (Curso) session.get(Curso.class, c2.getCodigo());
-            System.out.println("Segundo curso agregado = " + curso.getNombre());
+            curso = (Curso) session.get(Curso.class, c2.getCursCode());
+            System.out.println("Segundo curso agregado = " + curso.getCursName());
+
+            System.out.println("lombok ToString => " + curso);
 
             tx.commit();
             tx = null;
         } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
+            if ( tx != null ) tx.rollback();
             e.printStackTrace();
         } finally {
             session.close();
         }
 
-        // Muestra las tablas
-        HibernateUtil.checkData("select * from curso");
+        // Muestra registros de tabla
+        HibernateUtil.dataSelect("select * from cursos");
     }
 }

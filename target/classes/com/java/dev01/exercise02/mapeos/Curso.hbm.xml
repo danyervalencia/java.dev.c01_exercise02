@@ -3,11 +3,11 @@
         PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.java.dev01.exercise02.pojos.Curso" table="curso">
-        <id name="codigo" type="string" column="chrCurCodigo">
+    <class name="com.java.dev01.exercise02.pojos.Curso" table="cursos">
+        <id name="cursCode" column="curs_code" type="string">
             <generator class="assigned"/>
         </id>
-        <property name="nombre" column="vchCurNombre" type="string"/>
-        <property name="creditos" column="intCurCreditos" type="int"/>
+        <property name="cursName" column="curs_name" type="string"/>
+        <property name="cursCredits" column="curs_credits" type="int"/>
     </class>
 </hibernate-mapping>

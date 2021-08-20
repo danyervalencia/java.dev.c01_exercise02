@@ -13,15 +13,13 @@
         <!-- Pool de conexiones JDBC  -->
         <property name="connection.pool_size">1</property>
 
-        <!-- Se defini el dialecto SQL  -->
+        <!-- Se define el dialecto SQL  -->
         <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
-        <!-- Muestra sentencias SQLt -->
+        <!-- Muestra sentencias SQL en la terminal -->
         <property name="show_sql">true</property>
 
         <!-- Archivos mapeados -->
-        <!--<mapping resource="com\cjava\peru\s01_ejemplo02\mapeos\Persona.hbm.xml"/>
-        <mapping resource="com\cjava\peru\s01_ejemplo02\mapeos\Curso.hbm.xml"/>-->
         <mapping resource="com\java\dev01\exercise02\mapeos\Persona.hbm.xml"/>
         <mapping resource="com\java\dev01\exercise02\mapeos\Curso.hbm.xml"/>
     </session-factory>
