@@ -11,8 +11,8 @@ import com.java.dev01.exercise02.pojos.Curso;
 
 public class CursoTest {
     public static void main(String[] args) {
-        SessionFactory sessions = new Configuration().configure().buildSessionFactory();
-        Session session = sessions.openSession();
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        Session session = sessionFactory.openSession();
 
         Transaction tx = null; // Encapsula el ciclo de vida de las operaciones en una transaccion
         try {
@@ -30,7 +30,6 @@ public class CursoTest {
             c2.setCursCredits(4);
             session.save(c2);
 
-            // Obtiene objetos de la base de datos
             Curso curso = (Curso) session.get(Curso.class, c1.getCursCode());
             System.out.println("Primer curso agregado = " + curso.getCursName());
 
@@ -48,7 +47,6 @@ public class CursoTest {
             session.close();
         }
 
-        // Muestra registros de tabla
         HibernateUtil.dataSelect("select * from cursos");
     }
 }

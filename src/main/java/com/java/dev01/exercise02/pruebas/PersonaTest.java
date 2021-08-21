@@ -12,8 +12,8 @@ public class PersonaTest {
         //HibernateUtil.sqlExecute("create table personas(pers_id int, pers_paternal VARCHAR(50), pers_maternal VARCHAR(50), pers_name VARCHAR(50))");
 
         // Crear un SessionFactory y un objeto Session
-        SessionFactory sessions = new Configuration().configure().buildSessionFactory();
-        Session session = sessions.openSession();
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        Session session = sessionFactory.openSession();
 
         Transaction tx = null; // Encapsula el cilo de vida de las operaciones en una transaccion
         try {
@@ -42,7 +42,6 @@ public class PersonaTest {
             session.close();
         }
 
-        // Muestra las tablas
         HibernateUtil.dataSelect("select * from personas");
     }
 }
