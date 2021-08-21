@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,6 +15,7 @@ public class HibernateUtil {
     public static String dbdriver = "com.mysql.cj.jdbc.Driver";
     public static String username = "root";
     public static String password = "123456";
+
     public static final SessionFactory sessionFactory;
     public static final ThreadLocal session = new ThreadLocal();
     static Connection conn;
@@ -23,42 +23,27 @@ public class HibernateUtil {
 
     static {
         try {
-            // Crea el SessionFactory desde hibernate.cfg.xml
             sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable ex) {
-            // Make sure you log the exception, as it might be swallowed
-            System.err.println("Fallo inicial en la creaci�n de un SessionFactory." + ex);
+            System.err.println("Fallo inicial en la creación de un SessionFactory." + ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
 
     public static Session sessionCurrent() throws HibernateException {
-        Session s = (Session) session.get();
-        // Open a new Session, if this thread has none yet
-        if (s == null) {
-            s = sessionFactory.openSession();
-            // Store it in the ThreadLocal variable
-            session.set(s);
+        Session sess = (Session) session.get();
+        if (sess == null) {
+            sess = sessionFactory.openSession();
+            session.set(sess);
         }
-        return s;
+        return sess;
     }
 
     public static void sessionClose() throws HibernateException {
-        Session s = (Session) session.get();
-        if (s != null)
-            s.close();
+        Session sess = (Session) session.get();
+        if (sess != null)
+            sess.close();
         session.set(null);
-    }
-
-    public static void sqlExecute(String sql) {
-        try {
-            createStatement();
-            st.executeUpdate(sql);
-        } catch (Exception e) {
-            System.err.println("Sucedió una Excepción! ");
-            e.printStackTrace();
-            System.exit(0);
-        }
     }
 
     public static void createStatement() {
@@ -67,13 +52,24 @@ public class HibernateUtil {
             conn = DriverManager.getConnection(url, username, password);
             st = conn.createStatement();
         } catch (Exception e) {
-            System.err.println("Sucedi� una Excepci�n! ");
+            System.err.println("Ha ocurrido una Excepción! ");
             e.printStackTrace();
             System.exit(0);
         }
     }
 
-    // Drop table if exists
+    public static void sqlExecute(String sql) {
+        try {
+            createStatement();
+            st.executeUpdate(sql);
+        } catch (Exception e) {
+            System.err.println("Ha ocurrido una Excepción! ");
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
+
+    // Elimina tabla si existe
     public static void tableDrop(String sql) {
         try {
             createStatement();
@@ -87,9 +83,9 @@ public class HibernateUtil {
         System.out.println("\n*+*+*+*+*+* Tabla: " + sqlSplit[sqlSplit.length - 1] + " *+*+*+*+*+*");
         try {
             createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            HibernateUtil.resultsetOut(rs);
-//			conn.close();
+            ResultSet r = st.executeQuery(sql);
+            HibernateUtil.resultsetOut(r);
+            //conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,9 +125,6 @@ public class HibernateUtil {
             divider.setCharAt(colpos[i] - 1, '+');
         divider.setCharAt(linewidth - 1, '+');
 
-        // Begin the table output with a divider line
-        System.out.println(divider);
-
         // The next line of the table contains the column labels.
         // Begin with a blank line, and put the column names and column
         // divider characters "|" into it. overwrite() is defined below.
@@ -142,8 +135,6 @@ public class HibernateUtil {
             overwrite(line, pos, labels[i]);
             overwrite(line, colpos[i] + colwidths[i], " |");
         }
-        System.out.println(line);
-        System.out.println(divider);
 
         while (rs.next()) {
             line = new StringBuffer(blankline.toString());
